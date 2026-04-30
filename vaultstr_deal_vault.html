@@ -157,6 +157,13 @@ body{background:var(--bg);color:var(--text);line-height:1.5;overflow-x:hidden}
 /* HIDDEN */
 .hidden{display:none!important}
 
+/* EMBED MODE — activated via ?embed=1 URL param */
+.embed-mode .dv-header{display:none}
+.embed-mode .dv-disclaimer{display:none}
+.embed-mode body,.embed-mode{background:transparent}
+.embed-mode .dv-controls{padding-top:8px}
+.embed-mode .dv-grid{padding-top:12px}
+
 /* RESPONSIVE */
 @media(max-width:768px){
   .dv-controls{flex-direction:column;align-items:stretch}
@@ -575,6 +582,29 @@ function closeModal(){
 }
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+// ============================================================
+// EMBED MODE — ?embed=1 hides header/disclaimer, reports height
+// ============================================================
+const urlParams = new URLSearchParams(window.location.search);
+if(urlParams.get('embed')==='1'){
+  document.documentElement.classList.add('embed-mode');
+  document.body.style.background='transparent';
+  // Report height to parent for auto-resize (no double scrollbar)
+  function reportHeight(){
+    const h = document.documentElement.scrollHeight;
+    window.parent.postMessage({type:'vaultstr-resize',height:h},'*');
+  }
+  // Report on load, resize, and after filter changes
+  const origApply = window.applyFilters;
+  window.applyFilters = function(){origApply(); setTimeout(reportHeight,100);};
+  const origSetView = window.setView;
+  window.setView = function(v){origSetView(v); setTimeout(reportHeight,200);};
+  window.addEventListener('load', reportHeight);
+  window.addEventListener('resize', reportHeight);
+  new MutationObserver(()=>setTimeout(reportHeight,50))
+    .observe(document.getElementById('grid-view'),{childList:true,subtree:true});
+}
 
 // ============================================================
 // INIT

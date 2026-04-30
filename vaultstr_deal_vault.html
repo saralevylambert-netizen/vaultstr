@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
 <title>VaultSTR Deal Vault — Browse STR Investment Deals</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -238,7 +239,7 @@ body{background:var(--bg);color:var(--text);line-height:1.5;overflow-x:hidden}
 <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">&#10005;</button>
-    <img class="modal-img" id="modal-img" src="" alt="">
+    <img class="modal-img" id="modal-img" src="" alt="" referrerpolicy="no-referrer">
     <div class="modal-body" id="modal-body"></div>
   </div>
 </div>
@@ -448,7 +449,7 @@ function renderGrid(){
 
   grid.innerHTML = filteredDeals.map((d,i)=>`
     <div class="deal-card" onclick="openModal(${i})">
-      <img class="card-img" src="${d.heroImage||placeholderImg(d)}" alt="${d.name}" loading="lazy">
+      <img class="card-img" src="${d.heroImage||placeholderImg(d)}" alt="${d.name}" loading="lazy" referrerpolicy="no-referrer">
       <div class="card-body">
         <div class="card-location">${d.market||d.city+', '+d.state} · ${fmtDate(d.datePosted)}</div>
         <div class="card-title">${d.name}</div>

@@ -1,0 +1,520 @@
+
+<h2 class="sr-only">VaultSTR STR Stack Builder with PDF export — branded quiz and tool breakdown for real estate agents</h2>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--vs-bg:#FAFAF7;--vs-card:#F0EBE3;--vs-dark:#161415;--vs-accent:#161415;--vs-muted:#6B6462;--vs-border:#D9D4CE;--vs-cream:#F5F1EB;--vs-warm:#E8E2D9;--vs-green:#3B6D11;--vs-red:#A32D2D;--vs-blue:#185FA5;--vs-font:'Inter',Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body,html{font-family:var(--vs-font);color:var(--vs-dark);line-height:1.6;background:transparent}
+.vs-wrap{max-width:680px;margin:0 auto;padding:0}
+.vs-header{text-align:center;padding:2rem 0 1.5rem;border-bottom:1px solid var(--vs-border);margin-bottom:2rem}
+.vs-logo{font-size:28px;font-weight:600;letter-spacing:-0.5px;color:var(--vs-dark);margin-bottom:4px}
+.vs-logo span{font-weight:300}
+.vs-tagline{font-size:13px;color:var(--vs-muted);letter-spacing:0.3px;text-transform:uppercase}
+.vs-h1{font-size:36px;font-weight:400;color:var(--vs-dark);margin:1.5rem 0 0.75rem;line-height:1.2;letter-spacing:-0.5px}
+.vs-h1 em{font-style:italic;font-weight:400}
+.vs-subtitle{font-size:15px;color:var(--vs-muted);margin-bottom:2rem;line-height:1.6}
+.vs-progress{display:flex;gap:6px;margin-bottom:2rem}
+.vs-dot{height:3px;flex:1;background:var(--vs-warm);border-radius:2px;transition:background 0.3s}
+.vs-dot.active{background:var(--vs-dark)}
+.vs-q-label{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--vs-muted);margin-bottom:8px;font-weight:500}
+.vs-q-text{font-size:20px;font-weight:400;color:var(--vs-dark);margin-bottom:1.5rem;line-height:1.3}
+.vs-opts{display:flex;flex-direction:column;gap:10px}
+.vs-opt{background:var(--vs-cream);border:1px solid transparent;border-radius:8px;padding:14px 18px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:14px}
+.vs-opt:hover{border-color:var(--vs-border);background:var(--vs-card)}
+.vs-opt.sel{border-color:var(--vs-dark);background:#fff}
+.vs-opt-icon{font-size:20px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--vs-warm);border-radius:8px;flex-shrink:0}
+.vs-opt.sel .vs-opt-icon{background:var(--vs-dark);color:#fff}
+.vs-opt-text{flex:1}
+.vs-opt-label{font-size:14px;font-weight:500;color:var(--vs-dark)}
+.vs-opt-desc{font-size:12px;color:var(--vs-muted);margin-top:2px}
+.vs-nav{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--vs-border)}
+.vs-btn{font-family:var(--vs-font);font-size:13px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;padding:10px 24px;border-radius:6px;cursor:pointer;transition:all 0.2s;border:none}
+.vs-btn-primary{background:var(--vs-dark);color:#fff}
+.vs-btn-primary:hover{background:#2a2627}
+.vs-btn-secondary{background:transparent;color:var(--vs-muted);border:1px solid var(--vs-border)}
+.vs-btn-secondary:hover{border-color:var(--vs-dark);color:var(--vs-dark)}
+.vs-btn:disabled{opacity:0.3;cursor:default}
+.vs-results{display:none}
+.vs-pick-card{background:#fff;border:1px solid var(--vs-border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.vs-pick-header{padding:16px 20px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:background 0.2s}
+.vs-pick-header:hover{background:var(--vs-cream)}
+.vs-pick-icon{font-size:22px;width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:var(--vs-card);border-radius:8px;flex-shrink:0}
+.vs-pick-info{flex:1;min-width:0}
+.vs-pick-cat{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--vs-muted);font-weight:500}
+.vs-pick-name{font-size:16px;font-weight:500;color:var(--vs-dark);margin-top:2px}
+.vs-pick-bf{font-size:12px;color:var(--vs-muted);margin-top:2px}
+.vs-pick-chevron{font-size:18px;color:var(--vs-muted);transition:transform 0.3s;flex-shrink:0}
+.vs-pick-card.open .vs-pick-chevron{transform:rotate(180deg)}
+.vs-pick-body{display:none;padding:0 20px 20px;border-top:1px solid var(--vs-border)}
+.vs-pick-card.open .vs-pick-body{display:block}
+.vs-pick-why{font-size:13px;color:var(--vs-dark);line-height:1.6;padding:16px 0 12px}
+.vs-pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.vs-pick-pros,.vs-pick-cons{background:var(--vs-cream);border-radius:8px;padding:12px 14px}
+.vs-pick-pros-label,.vs-pick-cons-label{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;font-weight:600;margin-bottom:8px}
+.vs-pick-pros-label{color:var(--vs-green)}
+.vs-pick-cons-label{color:var(--vs-red)}
+.vs-pick-list{list-style:none;font-size:12px;color:var(--vs-dark);line-height:1.7}
+.vs-pick-list li::before{content:"";display:inline-block;width:4px;height:4px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.vs-pick-pros .vs-pick-list li::before{background:var(--vs-green)}
+.vs-pick-cons .vs-pick-list li::before{background:var(--vs-red)}
+.vs-alt-section{border-top:1px solid var(--vs-border);padding-top:14px}
+.vs-alt-label{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--vs-muted);font-weight:500;margin-bottom:10px}
+.vs-alt-card{background:var(--vs-cream);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.vs-alt-name{font-size:13px;font-weight:500;color:var(--vs-dark)}
+.vs-alt-bf{font-size:11px;color:var(--vs-muted);margin-top:2px}
+.vs-alt-why{font-size:12px;color:var(--vs-dark);margin-top:6px;line-height:1.5}
+.vs-section-title{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--vs-muted);font-weight:500;margin:2rem 0 1rem;padding-bottom:8px;border-bottom:1px solid var(--vs-border)}
+.vs-browse{display:none;margin-top:2rem}
+.vs-filter-bar{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap}
+.vs-filter{font-family:var(--vs-font);font-size:11px;text-transform:uppercase;letter-spacing:0.8px;padding:7px 16px;border-radius:20px;border:1px solid var(--vs-border);background:transparent;color:var(--vs-muted);cursor:pointer;font-weight:500;transition:all 0.2s}
+.vs-filter.active{background:var(--vs-dark);color:#fff;border-color:var(--vs-dark)}
+.vs-browse-toggle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:var(--vs-cream);border:1px solid var(--vs-border);border-radius:8px;cursor:pointer;font-family:var(--vs-font);font-size:13px;color:var(--vs-muted);font-weight:500;letter-spacing:0.3px;transition:all 0.2s;margin-top:2rem}
+.vs-browse-toggle:hover{border-color:var(--vs-dark);color:var(--vs-dark)}
+.vs-restart{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:transparent;border:1px solid var(--vs-border);border-radius:8px;cursor:pointer;font-family:var(--vs-font);font-size:12px;color:var(--vs-muted);text-transform:uppercase;letter-spacing:0.8px;font-weight:500;transition:all 0.2s;margin-top:1rem}
+.vs-restart:hover{border-color:var(--vs-dark);color:var(--vs-dark)}
+.vs-our-pick{display:inline-block;font-size:9px;text-transform:uppercase;letter-spacing:1px;background:var(--vs-dark);color:#fff;padding:3px 8px;border-radius:4px;font-weight:600;margin-left:8px;vertical-align:middle}
+.vs-cta-bar{text-align:center;margin-top:2.5rem;padding:1.5rem;background:var(--vs-cream);border-radius:10px;border:1px solid var(--vs-border)}
+.vs-cta-text{font-size:14px;color:var(--vs-dark);margin-bottom:12px;line-height:1.5}
+.vs-cta-text strong{font-weight:500}
+.vs-pdf-bar{margin-top:1.5rem;padding:1.5rem;background:#fff;border:1px solid var(--vs-border);border-radius:10px}
+.vs-pdf-title{font-size:14px;font-weight:500;color:var(--vs-dark);margin-bottom:4px}
+.vs-pdf-desc{font-size:12px;color:var(--vs-muted);margin-bottom:16px;line-height:1.5}
+.vs-pdf-row{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.vs-pdf-logo-area{flex:1;min-width:200px}
+.vs-pdf-logo-upload{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--vs-cream);border:1px dashed var(--vs-border);border-radius:8px;cursor:pointer;transition:all 0.2s}
+.vs-pdf-logo-upload:hover{border-color:var(--vs-dark);background:var(--vs-card)}
+.vs-pdf-logo-upload.has-logo{border-style:solid;border-color:var(--vs-green)}
+.vs-pdf-logo-preview{width:40px;height:40px;border-radius:6px;object-fit:contain;background:#fff;border:1px solid var(--vs-border)}
+.vs-pdf-logo-text{font-size:12px;color:var(--vs-muted)}
+.vs-pdf-logo-text strong{display:block;font-size:13px;color:var(--vs-dark);font-weight:500;margin-bottom:2px}
+.vs-pdf-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.vs-pdf-input{font-family:var(--vs-font);font-size:13px;padding:9px 14px;border:1px solid var(--vs-border);border-radius:6px;background:#fff;color:var(--vs-dark);width:180px}
+.vs-pdf-input::placeholder{color:var(--vs-muted)}
+.vs-pdf-dl{display:flex;align-items:center;gap:6px;font-family:var(--vs-font);font-size:13px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;padding:10px 20px;border-radius:6px;cursor:pointer;border:none;background:var(--vs-dark);color:#fff;transition:all 0.2s;white-space:nowrap}
+.vs-pdf-dl:hover{background:#2a2627}
+.vs-pdf-dl i{font-size:16px}
+</style>
+
+<div class="vs-wrap">
+<div class="vs-header">
+<div class="vs-logo">Vault<span>STR</span></div>
+<div class="vs-tagline">The operating system for investor-advising agents</div>
+</div>
+
+<div id="quiz-section">
+<h1 class="vs-h1">Build your client's <em>STR stack</em></h1>
+<p class="vs-subtitle">Seven questions. A defensible toolkit recommendation you can hand to your investor client — branded to your practice, backed by our research.</p>
+<div class="vs-progress" id="progress"></div>
+<div id="q-container"></div>
+<div class="vs-nav">
+<button class="vs-btn vs-btn-secondary" id="prevBtn" onclick="prevQ()" disabled>Back</button>
+<button class="vs-btn vs-btn-primary" id="nextBtn" onclick="nextQ()" disabled>Continue</button>
+</div>
+</div>
+
+<div class="vs-results" id="results-section">
+<h1 class="vs-h1">Your client's recommended <em>STR stack</em></h1>
+<p class="vs-subtitle">Based on portfolio profile, budget, and operational priorities — here's the toolkit you can confidently recommend. Expand any pick to see our reasoning and alternatives.</p>
+
+<div class="vs-pdf-bar">
+<div class="vs-pdf-title">Download client-ready PDF</div>
+<div class="vs-pdf-desc">Brand this recommendation with your company logo and name. Hand it to your investor client as a professional deliverable.</div>
+<div class="vs-pdf-row">
+<div class="vs-pdf-logo-area">
+<div class="vs-pdf-logo-upload" id="logoUpload" onclick="document.getElementById('logoInput').click()">
+<div id="logoPlaceholder" style="width:40px;height:40px;border-radius:6px;background:var(--vs-warm);display:flex;align-items:center;justify-content:center"><i class="ti ti-photo-up" style="font-size:18px;color:var(--vs-muted)" aria-hidden="true"></i></div>
+<img id="logoPreview" class="vs-pdf-logo-preview" style="display:none" alt="Logo preview">
+<div class="vs-pdf-logo-text"><strong id="logoLabel">Add your company logo</strong><span id="logoSub">PNG or JPG, optional</span></div>
+</div>
+<input type="file" id="logoInput" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="handleLogo(this)">
+</div>
+<div class="vs-pdf-actions">
+<input class="vs-pdf-input" type="text" id="agentName" placeholder="Your name / brokerage">
+<button class="vs-pdf-dl" onclick="generatePDF()"><i class="ti ti-download" aria-hidden="true"></i> Download PDF</button>
+</div>
+</div>
+</div>
+
+<div class="vs-section-title">Your recommended stack</div>
+<div id="results-cards"></div>
+<div class="vs-cta-bar">
+<div class="vs-cta-text"><strong>Want a deeper comparison?</strong> Ask us to compare your recommended tools against their top alternatives.</div>
+<button class="vs-btn vs-btn-primary" onclick="sendPrompt('Compare my recommended STR stack tools against their top alternatives and tell me if I should swap any')">Compare alternatives <span style="margin-left:4px">↗</span></button>
+</div>
+<button class="vs-browse-toggle" id="browseToggle" onclick="toggleBrowse()"><i class="ti ti-layout-grid" aria-hidden="true"></i> Browse all 16 categories</button>
+<div class="vs-browse" id="browse-section">
+<div class="vs-filter-bar" id="filter-bar"></div>
+<div id="browse-cards"></div>
+</div>
+<button class="vs-restart" onclick="restart()"><i class="ti ti-refresh" aria-hidden="true"></i> Retake the quiz</button>
+</div>
+</div>
+
+<script>
+let logoDataURL=null;
+
+function handleLogo(input){
+if(!input.files||!input.files[0])return;
+const file=input.files[0];
+const reader=new FileReader();
+reader.onload=function(e){
+logoDataURL=e.target.result;
+document.getElementById('logoPreview').src=logoDataURL;
+document.getElementById('logoPreview').style.display='block';
+document.getElementById('logoPlaceholder').style.display='none';
+document.getElementById('logoUpload').classList.add('has-logo');
+document.getElementById('logoLabel').textContent=file.name;
+document.getElementById('logoSub').textContent='Click to change';
+};
+reader.readAsDataURL(file);
+}
+
+const TD={
+"Property management software":{icon:"ti-server",group:"Software & Operations",tools:[
+{name:"Hostaway",bf:"Scaling portfolios (5+ units)",why:"The PMS that grows with your client. API-first architecture means every tool in the stack plugs in cleanly.",pros:["Direct API connections to 40+ channels","Built-in unified inbox and automation","Strong owner reporting for multi-property portfolios"],cons:["Per-listing pricing adds up fast","Learning curve on initial setup","Overkill for a single-property owner"]},
+{name:"Guesty",bf:"Professional managers running 20+ units",why:"Enterprise-grade operations for the client who's past the hobby stage.",pros:["Robust multi-user team management","Unified inbox across all channels","Built-in payment processing"],cons:["Premium pricing — hard to justify under 10 units","Complex onboarding","Contract lock-in on some plans"]},
+{name:"Hospitable",bf:"Hands-off automation for 1-5 units",why:"Set-and-forget automation that handles 80% of guest communication without intervention.",pros:["Best-in-class automated messaging","Simple, clean interface","Affordable per-listing pricing"],cons:["Limited channel management","No built-in payment processing","Outgrown quickly past 5 properties"]},
+{name:"OwnerRez",bf:"Direct-booking focused operators",why:"The power user's PMS — deep customization and direct booking website builder.",pros:["Powerful direct booking engine","One-time setup, no per-booking fees","Extremely customizable triggers and rules"],cons:["Dated interface","Steep learning curve","Smaller support team"]},
+{name:"Lodgify",bf:"Owners who want a branded website fast",why:"Website-first PMS that gets a direct booking site live in hours.",pros:["Beautiful website templates included","Channel manager built in","Good for international properties"],cons:["Website builder is the strength — PMS features lag","Limited automation depth","Fewer integrations than API-first competitors"]}
+]},
+"Dynamic pricing":{icon:"ti-chart-line",group:"Software & Operations",tools:[
+{name:"PriceLabs",bf:"Data-driven operators who want control",why:"Neighborhood-level data, customizable rules, and transparent logic.",pros:["Granular market data and customization","Portfolio-level dashboards","Transparent pricing logic"],cons:["Requires tuning to perform well","Interface can overwhelm new users","Market data varies by location"]},
+{name:"Wheelhouse",bf:"Operators who want pricing on autopilot",why:"Abstracts complexity into strategy presets — aggressive, moderate, conservative.",pros:["Strategy-based approach is intuitive","Clean, modern interface","Good portfolio reporting"],cons:["Less granular control than PriceLabs","Smaller market data set","Higher per-listing cost"]},
+{name:"Beyond",bf:"Large portfolios with revenue managers",why:"Enterprise pricing for operators with dedicated revenue staff.",pros:["Health scores and portfolio analytics","Strong Airbnb integration","Established market presence"],cons:["Interface feels dated","Customer support inconsistency","Per-booking fee model adds up"]},
+{name:"DPGO",bf:"Budget-conscious operators starting out",why:"Solid dynamic pricing at entry-level pricing.",pros:["Lowest price point in category","Simple setup and interface","Decent market data for major markets"],cons:["Limited advanced features","Smaller data set than leaders","Fewer integrations"]},
+{name:"PriceLabs Lite",bf:"Single-property owners who want simplicity",why:"PriceLabs' streamlined version — same data engine, simpler interface.",pros:["PriceLabs data at lower complexity","Quick setup","Affordable single-listing pricing"],cons:["Missing portfolio features","Limited customization","May outgrow quickly"]}
+]},
+"Channel managers":{icon:"ti-plug",group:"Software & Operations",tools:[
+{name:"Lodgify",bf:"Website + distribution in one tool",why:"Channel management bundled with a direct booking website.",pros:["Website builder included","Clean channel sync","International OTA support"],cons:["PMS features are secondary","Limited automation","Fewer API integrations"]},
+{name:"Rentals United",bf:"Maximizing niche OTA distribution",why:"Connects to 60+ channels including niche platforms.",pros:["60+ channel connections","Strong European OTA coverage","Dedicated channel optimization support"],cons:["Premium pricing","Requires a separate PMS","Setup complexity"]},
+{name:"Hostaway",bf:"Teams already using Hostaway PMS",why:"Native integration means zero sync issues.",pros:["Native PMS integration","40+ direct API channels","Unified calendar and inbox"],cons:["Only makes sense with Hostaway PMS","Per-listing cost","Overkill as standalone"]},
+{name:"Guesty",bf:"Teams already using Guesty PMS",why:"Native channel management inside the PMS you're already running.",pros:["Native PMS integration","Strong Airbnb/VRBO connections","Multi-calendar management"],cons:["Requires Guesty subscription","Premium pricing","Complex for small portfolios"]},
+{name:"Cloudbeds",bf:"Hotel-STR hybrid operations",why:"Built for hospitality, not just STR.",pros:["Hospitality-native design","Strong front-desk features","Good for hotel-STR hybrids"],cons:["Overkill for pure STR","Higher price point","Hotel-centric workflows"]}
+]},
+"Guest communication":{icon:"ti-message-circle",group:"Software & Operations",tools:[
+{name:"Hospitable",bf:"Automated messaging that sounds human",why:"The best automated guest messaging in the market.",pros:["Industry-best message automation","Tone-aware AI responses","Multi-platform support"],cons:["Limited beyond messaging","No built-in guidebook","Requires PMS for full stack"]},
+{name:"Hostaway",bf:"Comms inside the PMS",why:"Unified inbox built into the PMS.",pros:["Native PMS integration","Unified inbox across channels","Template library"],cons:["Automation less sophisticated than Hospitable","Only works with Hostaway","Template-heavy"]},
+{name:"Guesty",bf:"Multi-agent team inbox",why:"Team-based inbox with assignments and escalation.",pros:["Team inbox with assignments","Multi-channel unification","Canned responses and templates"],cons:["Requires Guesty ecosystem","Overkill for solo operators","Premium pricing"]},
+{name:"OwnerRez",bf:"Trigger-based automation",why:"Granular trigger system for automated communications.",pros:["Highly customizable triggers","No per-message fees","Direct booking integration"],cons:["Dated interface","Manual setup required","No AI-driven responses"]},
+{name:"StayFi",bf:"Building a direct booking funnel",why:"WiFi-based guest data capture for marketing.",pros:["Guest email/phone capture via WiFi","Marketing automation built in","Reduces OTA dependency"],cons:["Requires hardware installation","Not a full communication platform","Monthly subscription per property"]}
+]},
+"Cleaning & turnover":{icon:"ti-spray",group:"Software & Operations",tools:[
+{name:"Turno",bf:"Coordinating independent cleaners",why:"Auto-schedules based on check-in/check-out with a cleaner marketplace.",pros:["Auto-scheduling from PMS calendars","Cleaner marketplace for backup","Photo verification of cleans"],cons:["Marketplace quality varies by market","Basic reporting","Limited quality inspection"]},
+{name:"Breezeway",bf:"Quality-focused operators",why:"Goes beyond cleaning into property care and maintenance.",pros:["Maintenance + cleaning in one platform","Detailed inspection checklists","IoT device integration"],cons:["Higher price point","More complex than pure scheduling","Overkill for single properties"]},
+{name:"Properly",bf:"Visual cleaning standards",why:"Photo-based cleaning verification with visual checklists.",pros:["Visual verification system","Customizable photo checklists","Quality assurance focus"],cons:["Smaller market presence","Limited scheduling features","Per-property pricing"]},
+{name:"Operto",bf:"Smart property automation",why:"Connects cleaning to smart home systems.",pros:["Smart home integration","Automated access for cleaners","Energy management"],cons:["Requires smart home hardware","Premium pricing","Complex setup"]},
+{name:"Resort Cleaning",bf:"Enterprise scheduling (50+ units)",why:"Enterprise-grade cleaning operations for large portfolios.",pros:["Built for large portfolios","Team management features","Route optimization"],cons:["Overkill under 20 units","Higher minimum commitment","Less flexible"]}
+]},
+"STR regulations":{icon:"ti-gavel",group:"Software & Operations",tools:[
+{name:"STR Helpdesk",bf:"Pre-offer regulatory clarity",why:"Plain-language regulatory guidance for agents.",pros:["Plain-language regulatory summaries","Market-by-market coverage","Agent-friendly interface"],cons:["Coverage gaps in smaller markets","Not legal advice","Subscription model"]},
+{name:"Host Compliance",bf:"Ongoing permit compliance",why:"Monitoring and compliance tracking for permitted operators.",pros:["Permit monitoring","Compliance tracking","Government partnership network"],cons:["Not for pre-purchase research","Enterprise pricing","Limited agent-facing features"]},
+{name:"Deckard Technologies",bf:"Multi-market regulatory intelligence",why:"Regulatory data at scale across multiple markets.",pros:["Multi-market regulatory data","API access","Government data partnerships"],cons:["Enterprise pricing","Technical integration required","Not consumer-friendly"]},
+{name:"Granicus",bf:"Government compliance enforcement",why:"Government enforcement data that informs compliance risk.",pros:["Government enforcement data","Address-level compliance","National coverage"],cons:["Not built for agents","Complex data access","Government-facing"]},
+{name:"Rent Responsibly",bf:"Advocacy and education",why:"Industry advocacy with educational resources.",pros:["Educational resources","Industry advocacy updates","Community organizing tools"],cons:["Not a compliance platform","No permit tracking","Limited market-specific data"]}
+]},
+"Smart locks":{icon:"ti-lock",group:"Hardware & Data",tools:[
+{name:"Yale Assure Lock 2",bf:"Most investor clients",why:"WiFi + Apple Home Key, clean design, proven track record.",pros:["WiFi built-in — no hub required","Apple Home Key + app access","Clean, modern design"],cons:["Premium price point","Battery life shorter with WiFi","Requires WiFi at property"]},
+{name:"Schlage Encode Plus",bf:"Apple ecosystem properties",why:"Best HomeKit integration in the category.",pros:["Best-in-class HomeKit support","Built-in WiFi","Commercial-grade durability"],cons:["Bulkier design","Premium pricing","Limited non-Apple integrations"]},
+{name:"August Wi-Fi",bf:"Retrofit simplicity",why:"Installs on existing deadbolt — no drilling.",pros:["Retrofit — keeps existing keys","Clean, compact design","Good app experience"],cons:["Depends on existing deadbolt quality","WiFi range issues","No keypad by default"]},
+{name:"igloohome Deadbolt 2S",bf:"Unreliable WiFi properties",why:"Offline code generation — no WiFi required.",pros:["Works without WiFi","PIN codes generated offline","Durable construction"],cons:["No real-time monitoring","Manual code management","Limited integrations"]},
+{name:"Schlage Encode",bf:"Budget keypad + WiFi",why:"Solid mid-range with built-in WiFi and keypad.",pros:["Built-in WiFi and keypad","Competitive pricing","Schlage durability"],cons:["Dated design","Fewer smart integrations","Larger form factor"]},
+{name:"Ultraloq U-Bolt Pro",bf:"Every access method in one lock",why:"Fingerprint, keypad, app, key, auto-unlock.",pros:["6 access methods including fingerprint","Competitive pricing","Compact design"],cons:["Build quality below premium brands","App can be buggy","WiFi bridge sold separately"]}
+]},
+"Noise monitoring":{icon:"ti-volume",group:"Hardware & Data",tools:[
+{name:"Minut",bf:"Most operators — privacy-safe monitoring",why:"Noise, occupancy, temperature, and smoke in one device.",pros:["No audio recording — privacy-safe","Multi-sensor (noise, occupancy, temp, smoke)","Clean alert system with escalation"],cons:["Requires WiFi","Subscription per device","Limited PMS integrations"]},
+{name:"NoiseAware",bf:"Enterprise noise management",why:"Enterprise-focused with property management integrations.",pros:["Enterprise dashboard","Strong PM integrations","Proven track record"],cons:["Higher per-device cost","Less feature-rich than Minut","Noise-only"]},
+{name:"Party Squasher",bf:"Budget noise alerts",why:"Simple noise monitoring at entry-level pricing.",pros:["Low cost per device","Simple setup","Basic alert system"],cons:["Limited features","Smaller company","No multi-sensor"]},
+{name:"Alertify",bf:"Cigarette smoke detection",why:"Smoke and noise detection focused.",pros:["Smoke detection focus","Noise monitoring included","Compact design"],cons:["Narrower feature set","Smaller market presence","Limited integrations"]}
+]},
+"Market analytics":{icon:"ti-chart-bar",group:"Hardware & Data",tools:[
+{name:"AirDNA",bf:"Defensible market data for presentations",why:"The data source your client's lender is already using.",pros:["Industry-standard data source","Lender-recognized metrics","Neighborhood-level granularity"],cons:["Premium pricing","Accuracy varies in thin markets","Can overwhelm non-analytical users"]},
+{name:"Mashvisor",bf:"STR vs LTR comparison",why:"Side-by-side STR/LTR comparison for the key investor question.",pros:["STR vs LTR comparison built in","Market scoring system","Property-level estimates"],cons:["Data less granular than AirDNA","Smaller market coverage","Some stale listings"]},
+{name:"Rabbu",bf:"Quick revenue estimates",why:"Free estimates good enough for prospecting conversations.",pros:["Free tier available","Quick property-level estimates","Clean interface"],cons:["Less accurate than AirDNA","Limited market depth","Not lender-recognized"]},
+{name:"PriceLabs Market Dashboard",bf:"PriceLabs users",why:"Market analytics from the same pricing platform.",pros:["Integrated with PriceLabs pricing","Comp set analysis","Rate and occupancy trends"],cons:["Requires PriceLabs subscription","Less comprehensive than AirDNA","Operator-focused"]},
+{name:"AllTheRooms",bf:"Multi-market analysis at scale",why:"Bulk market data for sophisticated portfolio strategy.",pros:["Bulk market data access","API available","Historical trend data"],cons:["Enterprise pricing","Complex interface","Overkill for single-market"]}
+]},
+"Photography":{icon:"ti-camera",group:"Hardware & Data",tools:[
+{name:"Virtuance",bf:"Consistent quality across markets",why:"National network with standardized quality.",pros:["National photographer network","Consistent quality standards","HDR + editing included"],cons:["Premium pricing","Availability varies in rural areas","Less creative flexibility"]},
+{name:"HomeJab",bf:"Real estate photography with STR sensibility",why:"Specialists who shoot for bookings, not just MLS.",pros:["Real estate photography expertise","National coverage","Fast turnaround"],cons:["STR experience varies by photographer","Higher price than generalists","Scheduling in advance required"]},
+{name:"Airbnb Photography",bf:"Budget single-platform listings",why:"Free or low-cost through Airbnb's network.",pros:["Free or very low cost","Optimized for Airbnb listings","Easy scheduling"],cons:["Quality varies significantly","Only optimized for Airbnb","Limited editing options"]},
+{name:"BoxBrownie",bf:"Virtual staging and enhancement",why:"Transforms empty property photos into furnished listings.",pros:["Virtual staging capabilities","Photo enhancement and editing","Affordable per-image pricing"],cons:["Not a photography service","Virtual staging can mislead","Requires source photos"]},
+{name:"Local specialist",bf:"Properties with unique character",why:"A local photographer who knows the area.",pros:["Local market knowledge","Creative flexibility","Relationship-based service"],cons:["No quality standardization","Availability varies","Research required"]}
+]},
+"Mattresses & bedding":{icon:"ti-bed",group:"Money & Property",tools:[
+{name:"Saatva Classic",bf:"Premium properties",why:"The mattress that earns five-star reviews.",pros:["Premium sleep quality","White-glove delivery included","Luxury brand recognition"],cons:["Highest price point","Not ideal for high-turnover budget properties","Heavier"]},
+{name:"Casper Element Pro",bf:"Mid-range quality and durability",why:"The sweet spot of comfort and STR durability.",pros:["Good balance of comfort and durability","Reasonable pricing","Trusted brand"],cons:["Not luxury tier","Memory foam may not suit all guests","Standard delivery"]},
+{name:"Tuft & Needle",bf:"Budget furnishing at scale",why:"Best value in the category.",pros:["Best value per unit","Durable for STR use","Simple ordering at scale"],cons:["Basic feel","Limited size options","Minimal brand cachet"]},
+{name:"Standard Textile",bf:"Hotel-grade bedding supplies",why:"The supplier behind major hotel chains.",pros:["Hotel-grade quality","Commercial durability","Bulk pricing available"],cons:["Minimum order quantities","Not consumer-facing","Setup requires account"]},
+{name:"American Textile LINENWEAVE",bf:"Commercial-grade protection",why:"Built for institutional washing cycles.",pros:["Commercial durability","Stain and allergen protection","Built for heavy wash cycles"],cons:["Utilitarian feel","B2B ordering process","Minimum quantities"]}
+]},
+"Furnishing & interior design":{icon:"ti-armchair",group:"Money & Property",tools:[
+{name:"MasterHomes",bf:"Turnkey STR furnishing",why:"Send the listing, get back a fully furnished property.",pros:["Full-service STR-specific design","Turnkey installation","Optimized for booking performance"],cons:["Premium pricing","Limited style customization","Market availability varies"]},
+{name:"Fernish",bf:"Flexible rental furnishing",why:"Furniture rental that preserves cash flow.",pros:["Rental model preserves cash","Easy swaps and upgrades","Curated STR-friendly collections"],cons:["Monthly cost adds up","Limited market availability","Ownership costs less long-term"]},
+{name:"CORT",bf:"Corporate and mid-term stays",why:"Established furniture rental for business travelers.",pros:["Largest furniture rental network","Corporate client specialization","Nationwide availability"],cons:["Corporate aesthetic","Higher minimum terms","Setup fees"]},
+{name:"Rove Concepts",bf:"Design-forward properties",why:"Modern furniture where aesthetic is the competitive advantage.",pros:["High-design aesthetic","Quality construction","Strong visual impact in listings"],cons:["Premium pricing","Long lead times","Not optimized for STR durability"]},
+{name:"Wayfair Business",bf:"Budget furnishing at scale",why:"Volume pricing and wide selection.",pros:["Lowest price point at scale","Massive selection","Business account pricing"],cons:["Quality varies widely","No design guidance","Not STR-specific"]}
+]},
+"STR lenders":{icon:"ti-building-bank",group:"Money & Property",tools:[
+{name:"Kiavi",bf:"Experienced investors, fast close",why:"Automated underwriting for speed and certainty.",pros:["Fast automated underwriting","Competitive bridge and rental rates","No tax returns for DSCR"],cons:["Higher rates than conventional","Experience requirements","Not for first-time investors"]},
+{name:"Lima One Capital",bf:"Portfolio investors, multiple strategies",why:"Full product suite — bridge, rental, construction.",pros:["Multiple loan products","Flexible on property types","Portfolio lending experience"],cons:["Rates vary by product","Minimum loan amounts","More documentation"]},
+{name:"Visio Lending",bf:"Long-term DSCR loans for STR",why:"DSCR specialists who understand STR revenue.",pros:["DSCR loan specialists","30-year fixed available","STR income accepted"],cons:["Slower process","Higher minimum loan amounts","Limited bridge options"]},
+{name:"New Silver",bf:"Fast bridge financing",why:"Bridge lending focused on speed.",pros:["Fast bridge closings","Tech-forward platform","Competitive bridge rates"],cons:["Bridge-focused","Higher rates than conventional","Experience requirements"]},
+{name:"Griffin Funding",bf:"First-time STR investors",why:"More flexible qualification criteria.",pros:["Flexible qualification","First-time investor friendly","Bank statement programs available"],cons:["Higher rates for flexibility","Smaller operation","Less tech-forward"]}
+]},
+"STR insurance":{icon:"ti-shield-check",group:"Money & Property",tools:[
+{name:"Proper Insurance",bf:"STR-specific coverage that won't fail at claims",why:"Purpose-built for short-term rentals.",pros:["STR-specific policy design","Covers commercial activity","Liability + property in one"],cons:["Higher premiums","Underwriting can be slow","Not available in all states"]},
+{name:"Steadily",bf:"Landlord insurance with STR endorsements",why:"Fast online quotes with STR endorsements.",pros:["Fast online quoting","STR endorsements available","Competitive pricing"],cons:["Less STR-specific than Proper","Coverage varies by state","Endorsement vs. purpose-built"]},
+{name:"CBIZ",bf:"Complex commercial coverage",why:"Commercial broker for multi-property portfolios and LLCs.",pros:["Commercial-grade coverage","Complex structure expertise","Multi-property programs"],cons:["Broker model","Longer quoting process","Higher minimums"]},
+{name:"Slice",bf:"On-demand per-booking insurance",why:"Pay-per-booking — no bookings, no premiums.",pros:["Pay-per-booking model","On-demand activation","No annual commitment"],cons:["Cost adds up at high occupancy","Limited coverage scope","Newer in market"]},
+{name:"Hippo",bf:"Tech-forward homeowner's policies",why:"Modern experience with smart home discounts.",pros:["Modern digital experience","Smart home device discounts","Standard homeowner's coverage"],cons:["Not designed for STR","May deny STR claims","Limited commercial coverage"]}
+]},
+"Investing platforms":{icon:"ti-trending-up",group:"Money & Property",tools:[
+{name:"Arrived",bf:"Passive STR exposure",why:"Fractional STR investment, no operational burden.",pros:["Truly passive STR investment","Low minimum investment","Diversified property selection"],cons:["No operational control","Limited liquidity","Returns depend on platform"]},
+{name:"Here",bf:"Vacation rental fractional ownership",why:"SEC-registered vacation rental fractional investment.",pros:["SEC-registered offerings","Vacation rental focus","Quarterly distributions"],cons:["Limited property selection","No personal use","Platform risk"]},
+{name:"Pacaso",bf:"Fractional luxury with personal use",why:"Co-ownership of luxury vacation homes.",pros:["Personal use included","Luxury property selection","Professional management"],cons:["High minimum investment","Limited to luxury markets","Co-ownership complexity"]},
+{name:"Fundhomes",bf:"Curated fractional STR investments",why:"Boutique approach to fractional STR investing.",pros:["Curated property selection","STR-specific focus","Investor community"],cons:["Newer platform","Limited track record","Smaller property pool"]},
+{name:"Lofty",bf:"Blockchain-backed fractional real estate",why:"Daily rent distributions with blockchain transparency.",pros:["Daily rent distributions","Blockchain transparency","Secondary market"],cons:["Blockchain complexity","Not STR-specific","Regulatory uncertainty"]}
+]},
+"Management companies":{icon:"ti-home-cog",group:"Money & Property",tools:[
+{name:"Evolve",bf:"Professional management without losing control",why:"Handles listing optimization and pricing while owner retains access.",pros:["Owner retains property access","Performance-based fees","National coverage"],cons:["Owner still handles some on-site tasks","10% management fee","Less hands-off than full-service"]},
+{name:"AvantStay",bf:"Premium luxury management",why:"Luxury STR management for properties competing on experience.",pros:["Luxury brand positioning","Design and furnishing investment","Hospitality-grade experience"],cons:["Selective — not all properties accepted","Higher management fees","Limited to premium markets"]},
+{name:"Casago",bf:"Full-service local management",why:"Local franchises with regional expertise.",pros:["Local market expertise","Full-service management","Multi-property portfolio management"],cons:["Quality varies by franchise","Less tech-forward","Inconsistent experience"]}
+]}
+};
+
+const Qs=[
+{id:"size",text:"How many properties is your client managing or planning to manage?",icon:"ti-building",options:[
+{label:"1 property",desc:"Getting started with a single investment",value:"1"},
+{label:"2–4 properties",desc:"Building a small portfolio",value:"2-4"},
+{label:"5–15 properties",desc:"Scaling a serious operation",value:"5-15"},
+{label:"16+ properties",desc:"Enterprise-level portfolio",value:"16+"}]},
+{id:"platforms",text:"Where will the properties be listed?",icon:"ti-world",options:[
+{label:"Airbnb only",desc:"Single-platform strategy",value:"airbnb"},
+{label:"Airbnb + VRBO",desc:"Dual-platform distribution",value:"airbnb-vrbo"},
+{label:"Multi-channel + direct",desc:"Maximum distribution with direct bookings",value:"multi"},
+{label:"Direct booking focus",desc:"Building a brand, reducing OTA dependency",value:"direct"}]},
+{id:"budget",text:"What's the operational budget tolerance per property?",icon:"ti-wallet",options:[
+{label:"Lean",desc:"Essential tools only, maximize margins",value:"lean"},
+{label:"Moderate",desc:"Balanced tooling with room for optimization",value:"moderate"},
+{label:"Premium",desc:"Best-in-class everything, margins support it",value:"premium"},
+{label:"Let revenue decide",desc:"Invest in tools that pay for themselves",value:"roi"}]},
+{id:"automation",text:"How hands-on does your client want to be?",icon:"ti-robot",options:[
+{label:"Fully automated",desc:"Set it and forget it — passive income priority",value:"auto"},
+{label:"Mostly automated",desc:"Automate operations, keep strategic control",value:"mostly"},
+{label:"Hands-on operator",desc:"Involved in daily decisions and guest experience",value:"hands-on"},
+{label:"Managed by a company",desc:"Full-service management, owner is the investor",value:"managed"}]},
+{id:"role",text:"What's your client's primary role?",icon:"ti-user",options:[
+{label:"Owner-operator",desc:"Lives near the property, handles operations",value:"owner-op"},
+{label:"Remote investor",desc:"Owns property in a different market",value:"remote"},
+{label:"Portfolio builder",desc:"Scaling acquisitions across markets",value:"portfolio"},
+{label:"First-time investor",desc:"Buying their first investment property",value:"first-time"}]},
+{id:"type",text:"What type of property is the primary investment?",icon:"ti-home",options:[
+{label:"Single-family home",desc:"Traditional house or cabin",value:"sfh"},
+{label:"Condo or apartment",desc:"Unit in a building with HOA/strata",value:"condo"},
+{label:"Luxury or unique property",desc:"High-end home, treehouse, A-frame, etc.",value:"luxury"},
+{label:"Multi-unit building",desc:"Duplex, triplex, or small apartment building",value:"multi-unit"}]},
+{id:"pain",text:"What's the biggest operational pain point right now?",icon:"ti-alert-triangle",options:[
+{label:"Guest communication overload",desc:"Too many messages, not enough hours",value:"comms"},
+{label:"Pricing and revenue optimization",desc:"Leaving money on the table",value:"pricing"},
+{label:"Cleaning coordination",desc:"Turnover logistics are a nightmare",value:"cleaning"},
+{label:"Regulatory uncertainty",desc:"Not sure what's legal where",value:"regulations"}]}
+];
+
+let step=0,answers={},browseOpen=false,currentRecs={};
+
+function init(){
+document.getElementById('progress').innerHTML=Qs.map((_,i)=>`<div class="vs-dot${i===0?' active':''}"></div>`).join('');
+renderQ();
+}
+function renderQ(){
+const q=Qs[step];
+document.getElementById('q-container').innerHTML=`<div class="vs-q-label">Question ${step+1} of ${Qs.length}</div><div class="vs-q-text">${q.text}</div><div class="vs-opts">${q.options.map(o=>`<div class="vs-opt${answers[q.id]===o.value?' sel':''}" onclick="selectOpt('${q.id}','${o.value}',this)"><div class="vs-opt-icon"><i class="ti ${q.icon}" aria-hidden="true"></i></div><div class="vs-opt-text"><div class="vs-opt-label">${o.label}</div><div class="vs-opt-desc">${o.desc}</div></div></div>`).join('')}</div>`;
+document.querySelectorAll('.vs-dot').forEach((d,i)=>d.classList.toggle('active',i<=step));
+document.getElementById('prevBtn').disabled=step===0;
+document.getElementById('nextBtn').disabled=!answers[Qs[step].id];
+document.getElementById('nextBtn').textContent=step===Qs.length-1?'See your stack':'Continue';
+}
+function selectOpt(id,val,el){answers[id]=val;document.querySelectorAll('.vs-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');document.getElementById('nextBtn').disabled=false;}
+function nextQ(){if(step<Qs.length-1){step++;renderQ();}else showResults();}
+function prevQ(){if(step>0){step--;renderQ();}}
+
+function showResults(){
+document.getElementById('quiz-section').style.display='none';
+document.getElementById('results-section').style.display='block';
+const a=answers;const rec={};
+rec["Property management software"]=a.size==="16+"||a.size==="5-15"?"Hostaway":a.automation==="auto"?"Hospitable":a.platforms==="direct"?"OwnerRez":"Hospitable";
+rec["Dynamic pricing"]=a.budget==="lean"?"DPGO":a.automation==="hands-on"?"PriceLabs":a.size==="16+"?"PriceLabs":"Wheelhouse";
+rec["Channel managers"]=a.platforms==="airbnb"?"Lodgify":a.platforms==="multi"?"Rentals United":"Lodgify";
+rec["Guest communication"]=a.pain==="comms"?"Hospitable":a.automation==="auto"?"Hospitable":"Hostaway";
+rec["Cleaning & turnover"]=a.pain==="cleaning"?"Breezeway":a.size==="16+"?"Breezeway":"Turno";
+rec["STR regulations"]="STR Helpdesk";
+rec["Smart locks"]="Yale Assure Lock 2";
+rec["Noise monitoring"]="Minut";
+rec["Market analytics"]=a.role==="first-time"?"Rabbu":"AirDNA";
+rec["Photography"]=a.type==="luxury"?"Virtuance":"HomeJab";
+rec["STR lenders"]=a.role==="first-time"?"Griffin Funding":a.role==="portfolio"?"Lima One Capital":"Kiavi";
+rec["STR insurance"]="Proper Insurance";
+rec["Investing platforms"]="Arrived";
+rec["Management companies"]=a.automation==="managed"?"Evolve":a.type==="luxury"?"AvantStay":"Evolve";
+rec["Mattresses & bedding"]=a.type==="luxury"?"Saatva Classic":a.budget==="lean"?"Tuft & Needle":"Casper Element Pro";
+rec["Furnishing & interior design"]=a.type==="luxury"?"MasterHomes":a.budget==="lean"?"Wayfair Business":"Fernish";
+currentRecs=rec;
+const rc=document.getElementById('results-cards');rc.innerHTML='';
+for(const[cat,toolName] of Object.entries(rec)){const catData=TD[cat];if(!catData)continue;rc.innerHTML+=buildPickCard(cat,catData,toolName,true);}
+document.querySelectorAll('#results-cards .vs-pick-header').forEach(h=>{h.addEventListener('click',()=>{h.closest('.vs-pick-card').classList.toggle('open');});});
+buildBrowse();
+}
+
+function buildPickCard(cat,catData,toolName,showOurPick){
+const tool=catData.tools.find(t=>t.name===toolName);if(!tool)return'';
+const alts=catData.tools.filter(t=>t.name!==toolName);
+return`<div class="vs-pick-card"><div class="vs-pick-header"><div class="vs-pick-icon"><i class="ti ${catData.icon}" aria-hidden="true"></i></div><div class="vs-pick-info"><div class="vs-pick-cat">${cat}</div><div class="vs-pick-name">${tool.name}${showOurPick?'<span class="vs-our-pick">Our pick</span>':''}</div><div class="vs-pick-bf">${tool.bf}</div></div><div class="vs-pick-chevron"><i class="ti ti-chevron-down" aria-hidden="true"></i></div></div><div class="vs-pick-body"><div class="vs-pick-why">${tool.why}</div><div class="vs-pick-grid"><div class="vs-pick-pros"><div class="vs-pick-pros-label">Strengths</div><ul class="vs-pick-list">${tool.pros.map(p=>`<li>${p}</li>`).join('')}</ul></div><div class="vs-pick-cons"><div class="vs-pick-cons-label">Watch out</div><ul class="vs-pick-list">${tool.cons.map(c=>`<li>${c}</li>`).join('')}</ul></div></div>${alts.length?`<div class="vs-alt-section"><div class="vs-alt-label">Alternatives to consider</div>${alts.map(a=>`<div class="vs-alt-card"><div class="vs-alt-name">${a.name}</div><div class="vs-alt-bf">${a.bf}</div><div class="vs-alt-why">${a.why}</div></div>`).join('')}</div>`:''}</div></div>`;
+}
+function toggleBrowse(){browseOpen=!browseOpen;document.getElementById('browse-section').style.display=browseOpen?'block':'none';document.getElementById('browseToggle').innerHTML=browseOpen?'<i class="ti ti-x" aria-hidden="true"></i> Close category browser':'<i class="ti ti-layout-grid" aria-hidden="true"></i> Browse all 16 categories';}
+function buildBrowse(){const groups=[...new Set(Object.values(TD).map(c=>c.group))];document.getElementById('filter-bar').innerHTML=`<button class="vs-filter active" onclick="filterCats('all',this)">All</button>`+groups.map(g=>`<button class="vs-filter" onclick="filterCats('${g}',this)">${g}</button>`).join('');renderBrowse('all');}
+function filterCats(group,btn){document.querySelectorAll('.vs-filter').forEach(f=>f.classList.remove('active'));btn.classList.add('active');renderBrowse(group);}
+function renderBrowse(group){const bc=document.getElementById('browse-cards');bc.innerHTML='';for(const[cat,catData] of Object.entries(TD)){if(group!=='all'&&catData.group!==group)continue;bc.innerHTML+=buildPickCard(cat,catData,catData.tools[0].name,false);}bc.querySelectorAll('.vs-pick-header').forEach(h=>{h.addEventListener('click',()=>{h.closest('.vs-pick-card').classList.toggle('open');});});}
+function restart(){step=0;answers={};browseOpen=false;currentRecs={};document.getElementById('quiz-section').style.display='block';document.getElementById('results-section').style.display='none';document.getElementById('browse-section').style.display='none';renderQ();}
+
+function generatePDF(){
+const{jsPDF}=window.jspdf;
+const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+const W=210,H=297,M=20;
+const agentName=document.getElementById('agentName').value.trim();
+let y=M;
+
+const dark=[22,20,21];
+const muted=[107,100,98];
+const green=[59,109,17];
+const red=[163,45,45];
+const cream=[240,235,227];
+const warmBg=[245,241,235];
+
+doc.setFillColor(...warmBg);
+doc.rect(0,0,W,50,`F`);
+
+if(logoDataURL){
+try{doc.addImage(logoDataURL,'PNG',M,12,26,26);}catch(e){}
+}
+
+let headerX=logoDataURL?M+32:M;
+doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(...dark);
+doc.text('VaultSTR',headerX,25);
+doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...muted);
+doc.text('THE OPERATING SYSTEM FOR INVESTOR-ADVISING AGENTS',headerX,31);
+
+if(agentName){
+doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...muted);
+doc.text('Prepared by: '+agentName,headerX,38);
+}
+
+const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+doc.setFontSize(8);doc.setTextColor(...muted);
+doc.text(today,W-M,38,{align:'right'});
+
+y=58;
+doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(...dark);
+doc.text('Recommended STR Stack',M,y);
+y+=4;
+doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...muted);
+y+=6;
+doc.text('A curated toolkit recommendation based on portfolio profile, budget,',M,y);
+y+=4.5;
+doc.text('and operational priorities. Each pick is backed by editorial research.',M,y);
+y+=10;
+
+doc.setDrawColor(217,212,206);doc.setLineWidth(0.3);
+doc.line(M,y,W-M,y);
+y+=8;
+
+const groups={"Software & Operations":[],"Hardware & Data":[],"Money & Property":[]};
+for(const[cat,toolName] of Object.entries(currentRecs)){
+const catData=TD[cat];if(!catData)continue;
+const tool=catData.tools.find(t=>t.name===toolName);if(!tool)continue;
+groups[catData.group].push({cat,tool,catData});
+}
+
+for(const[groupName,items] of Object.entries(groups)){
+if(items.length===0)continue;
+if(y>H-40){doc.addPage();y=M;}
+
+doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...muted);
+doc.text(groupName.toUpperCase(),M,y);
+y+=2;doc.setDrawColor(217,212,206);doc.setLineWidth(0.2);doc.line(M,y,W-M,y);y+=6;
+
+for(const{cat,tool}of items){
+const cardH=38;
+if(y+cardH>H-M){doc.addPage();y=M;}
+
+doc.setFillColor(...cream);
+doc.roundedRect(M,y,W-2*M,cardH,3,3,'F');
+
+doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...muted);
+doc.text(cat.toUpperCase(),M+6,y+7);
+
+doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(...dark);
+doc.text(tool.name,M+6,y+14);
+
+doc.setFillColor(...dark);
+doc.roundedRect(M+6+doc.getTextWidth(tool.name)+3,y+10,18,5,1.5,1.5,'F');
+doc.setFont('helvetica','bold');doc.setFontSize(5.5);doc.setTextColor(255,255,255);
+doc.text('OUR PICK',M+6+doc.getTextWidth(tool.name)+6,y+13.5);
+
+doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...muted);
+doc.text(tool.bf,M+6,y+20);
+
+doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...dark);
+const whyLines=doc.splitTextToSize(tool.why,W-2*M-12);
+doc.text(whyLines.slice(0,2),M+6,y+26);
+
+const prosX=M+6;const consX=M+(W-2*M)/2+3;
+const detailY=y+cardH+4;
+
+if(detailY+20>H-M){doc.addPage();y=M;}else{y=detailY;}
+
+doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(...green);
+doc.text('STRENGTHS',prosX,y);
+doc.setTextColor(...red);
+doc.text('WATCH OUT',consX,y);
+y+=4;
+
+doc.setFont('helvetica','normal');doc.setFontSize(7);
+const colW=(W-2*M)/2-6;
+for(let i=0;i<Math.max(tool.pros.length,tool.cons.length);i++){
+if(y>H-M){doc.addPage();y=M;}
+if(tool.pros[i]){
+doc.setFillColor(...green);doc.circle(prosX+1.5,y-1,0.8,'F');
+doc.setTextColor(...dark);
+const pLines=doc.splitTextToSize(tool.pros[i],colW);
+doc.text(pLines[0],prosX+5,y);
+}
+if(tool.cons[i]){
+doc.setFillColor(...red);doc.circle(consX+1.5,y-1,0.8,'F');
+doc.setTextColor(...dark);
+const cLines=doc.splitTextToSize(tool.cons[i],colW);
+doc.text(cLines[0],consX+5,y);
+}
+y+=5;
+}
+y+=6;
+}
+y+=2;
+}
+
+doc.setDrawColor(217,212,206);doc.setLineWidth(0.3);
+if(y+20>H-M){doc.addPage();y=M;}
+doc.line(M,y,W-M,y);y+=8;
+doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...muted);
+doc.text('Powered by VaultSTR — vaultstr.com',W/2,y,{align:'center'});
+y+=4;
+doc.text('Rankings based on editorial research across 16 STR tool categories.',W/2,y,{align:'center'});
+
+if(agentName){
+y+=4;doc.text('Prepared by '+agentName,W/2,y,{align:'center'});
+}
+
+doc.save('VaultSTR-STR-Stack-Recommendation.pdf');
+}
+
+init();
+</script>

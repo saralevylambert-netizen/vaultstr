@@ -3,75 +3,303 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VaultSTR — Tools for STR Investors & Advisors</title>
-  <meta name="description" content="VaultSTR tools: browse STR investment deals, match your tool stack, and build a recommended stack for your clients." />
-  <style>
-    :root {
-      --ink: #161415;
-      --red: #c03a38;
-      --green: #2d6a4f;
-      --cream: #fffcf7;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--cream);
-      color: var(--ink);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-    }
-    .wrap { max-width: 880px; margin: 0 auto; padding: 72px 24px 96px; }
-    header { margin-bottom: 56px; }
-    .brand {
-      font-size: 14px; font-weight: 700; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--red); margin-bottom: 18px;
-    }
-    h1 { font-size: 40px; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; }
-    .lede { font-size: 18px; max-width: 540px; color: #443f40; }
-    .grid { display: grid; gap: 18px; }
-    @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
-    .card {
-      display: block; text-decoration: none; color: inherit;
-      background: #fff; border: 1px solid #eadfce; border-radius: 14px;
-      padding: 26px 24px; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-    }
-    .card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(22,20,21,.10); border-color: var(--green); }
-    .card h2 { font-size: 20px; margin-bottom: 8px; }
-    .card p { font-size: 15px; color: #5a5455; }
-    .card .go { display: inline-block; margin-top: 16px; font-weight: 600; font-size: 14px; color: var(--green); }
-    .card.full { grid-column: 1 / -1; }
-    footer { margin-top: 64px; font-size: 13px; color: #8a8385; }
-  </style>
+  <title>VaultSTR — STR Tools, Deals & Lender Rankings for Real Estate Agents</title>
+  <meta name="description" content="VaultSTR is the operating system for real estate agents who advise investor clients. Branded pro formas, honest tool comparisons, and underwritten STR deal flow." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">VaultSTR</div>
-      <h1>The operating system for STR investment advisors.</h1>
-      <p class="lede">Three tools to help you advise investor clients on short-term rental deals and the software stack to run them.</p>
-    </header>
 
-    <main class="grid">
-      <a class="card" href="vaultstr_deal_vault.html">
-        <h2>Deal Vault</h2>
-        <p>Browse curated STR investment deals worth underwriting.</p>
-        <span class="go">Open Deal Vault →</span>
-      </a>
+  <!-- ===================== NAV ===================== -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">Vault<b>STR</b></a>
+      <nav class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <div class="has-mega">
+          <span class="nav-link mega-toggle">Categories <span class="chev"></span></span>
+          <div class="mega">
+            <div class="mega-col">
+              <h4>Software &amp; Operations</h4>
+              <a href="#">Property Management Software</a>
+              <a href="#">Dynamic Pricing Tools</a>
+              <a href="#">Channel Managers</a>
+              <a href="#">Guest Communication</a>
+              <a href="#">Cleaning &amp; Turnover</a>
+              <a href="#">STR Regulations</a>
+            </div>
+            <div class="mega-col">
+              <h4>Hardware &amp; Data</h4>
+              <a href="#">Smart Locks</a>
+              <a href="#">Noise Monitoring</a>
+              <a href="#">STR Market Analytics</a>
+              <a href="#">STR Photography</a>
+              <a href="#">Mattresses &amp; Bedding</a>
+              <a href="#">STR Furnishing</a>
+            </div>
+            <div class="mega-col">
+              <h4>Money &amp; Property</h4>
+              <a href="#">STR Lenders</a>
+              <a href="#">STR Insurance</a>
+              <a href="#">STR Investing Platforms</a>
+              <a href="#">Management Companies</a>
+              <a href="deals.html">Deal Vault</a>
+              <a href="featured-deals.html">Featured Deals</a>
+            </div>
+          </div>
+        </div>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="deals.html">Deal Vault</a>
+        <a class="nav-link" href="https://app.vaultstr.com/proforma">Pro Forma</a>
+        <a class="nav-link" href="#guides">Blog</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="nav-link" href="https://app.vaultstr.com/">Log In</a>
+        <a class="btn btn--dark" href="#submit">Submit a Tool</a>
+      </div>
+      <button class="menu-btn" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    </div>
+  </header>
 
-      <a class="card" href="vaultstr_tool_matcher.html">
-        <h2>Tool Matcher</h2>
-        <p>Answer a few questions and get matched to exactly the STR tools you need — 75 companies across 18 categories.</p>
-        <span class="go">Open Tool Matcher →</span>
-      </a>
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="container">
+      <h1>Your clients deserve<br /><span class="rotator serif-accent" id="rotator">better underwriting.</span></h1>
+      <p class="lede">VaultSTR is the operating system for real estate agents who advise investor clients — starting with short-term rentals. Branded pro formas, honest tool comparisons, and deal flow that makes you the specialist in your market.</p>
+      <div class="hero-actions">
+        <a class="btn btn--red" href="https://app.vaultstr.com/proforma">Underwrite a Deal</a>
+        <a class="btn btn--ghost" href="deals.html">Active STR Deals</a>
+      </div>
+    </div>
+  </section>
 
-      <a class="card full" href="vaultstr_stack_builder_with_pdf.html">
-        <h2>Stack Builder</h2>
-        <p>Build a recommended software stack for your client and export it as a branded PDF.</p>
-        <span class="go">Open Stack Builder →</span>
-      </a>
-    </main>
+  <!-- ===================== TRUSTED LOGOS ===================== -->
+  <section class="trusted">
+    <div class="container">
+      <p>Reviewing &amp; comparing 100+ tools across the STR ecosystem</p>
+      <div class="trusted-row">
+        <img src="https://cdn.prod.website-files.com/69d41baafafa87e1f5546bc9/69dfd0f601845b6f1e8a0cdb_PriceLabs_idch77bu5m_0.png" alt="PriceLabs" />
+        <img src="https://cdn.prod.website-files.com/69d41baafafa87e1f5546bc9/69dfd0fbfc3a77e8d22b00d5_Breezeway_idZdIdmERU_0.png" alt="Breezeway" />
+        <img src="https://cdn.prod.website-files.com/69d41baafafa87e1f5546bc9/69dfd0e8142ac40c834eab62_Schlage_idmHl70axJ_0.png" alt="Schlage" />
+        <img src="https://cdn.prod.website-files.com/69d41baafafa87e1f5546bc9/69dfd0eea62a099f22c48f89_Minut_idljfE-8DI_0.png" alt="Minut" />
+        <img src="https://cdn.prod.website-files.com/69d41baafafa87e1f5546bc9/69dfd56a916f53b0478a0113_Obie-Primary-Logo-Color-Wordmark.png" alt="Obie" />
+        <img src="https://cdn.prod.website-files.com/69d41baafafa87e1f5546bc9/69dfdbfa9fff520d342795e2_Airbnb_Logo_1.png" alt="Airbnb" />
+      </div>
+    </div>
+  </section>
 
-    <footer>© VaultSTR</footer>
-  </div>
+  <!-- ===================== VALUE PROP ===================== -->
+  <section class="section">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">Built for the agent</span>
+        <h2 style="margin-top:18px">Tools built for the agent, <span class="serif-accent">not the investor.</span></h2>
+        <p class="lede">DealCheck, AirDNA, Rabbu — all built for the investor. Until now, nothing was built for you. VaultSTR gives you branded pro formas, honest tool comparisons, and curated deal flow so you walk into every client call as the specialist.</p>
+        <div class="split-actions">
+          <a class="btn btn--dark" href="https://app.vaultstr.com/proforma">Build a Branded Pro Forma</a>
+        </div>
+      </div>
+      <div class="card" style="background:var(--beige); border:none;">
+        <span class="tag" style="color:var(--red)">The VaultSTR difference</span>
+        <h3 style="font-family:var(--serif); font-style:italic; font-size:28px; font-weight:400; margin:14px 0;">"You went from order-taker to advisor."</h3>
+        <p>Every tool category in the STR ecosystem — evaluated for the agent, not the investor. Honest rankings, no pay-to-play.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== STATS ===================== -->
+  <section class="section--tight">
+    <div class="container">
+      <div class="stats">
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="num">15+</div>
+            <div class="label">Categories covered</div>
+            <div class="desc">Every tool category in the STR ecosystem — evaluated for the agent.</div>
+          </div>
+          <div class="stat">
+            <div class="num">1.5M+</div>
+            <div class="label">US licensed agents</div>
+            <div class="desc">The total addressable market. Most have zero tools built for how they work with investors.</div>
+          </div>
+          <div class="stat">
+            <div class="num">$2B+</div>
+            <div class="label">Agent commissions (Q1 2025)</div>
+            <div class="desc">From investor clients — the most demanding, least supported clients an agent has.</div>
+          </div>
+          <div class="stat">
+            <div class="num">100+</div>
+            <div class="label">Tools reviewed</div>
+            <div class="desc">Compared across the STR ecosystem, scored on the same rubric.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DEALS ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="head-row">
+        <div>
+          <span class="eyebrow">Straight from our Vault</span>
+          <h2 style="margin-top:16px">Today's Underwritten STR Deals</h2>
+        </div>
+        <a class="btn btn--ghost" href="deals.html">See Deals</a>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <span class="tag">Active · Smoky Mountains, TN</span>
+          <h3>4BR Cabin · $625,000</h3>
+          <p>Projected gross revenue, net cash flow, and a market-adjusted CoC return — underwritten, not guessed.</p>
+          <a class="go" href="deals.html">View underwriting →</a>
+        </div>
+        <div class="card">
+          <span class="tag">Active · Gulf Shores, AL</span>
+          <h3>3BR Condo · $410,000</h3>
+          <p>ADR, occupancy, and regulatory risk factored into a defensible projected return.</p>
+          <a class="go" href="deals.html">View underwriting →</a>
+        </div>
+        <div class="card">
+          <span class="tag">Active · Joshua Tree, CA</span>
+          <h3>2BR Desert Retreat · $535,000</h3>
+          <p>Full Zillow listing plus VaultSTR's institutional-grade underwriting in one click.</p>
+          <a class="go" href="deals.html">View underwriting →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NEWSLETTER ===================== -->
+  <section class="section--tight">
+    <div class="container">
+      <div class="cta-band">
+        <div>
+          <span class="eyebrow">Daily deals</span>
+          <h2 style="margin-top:14px">Get daily STR deals in your inbox</h2>
+          <p>Subscribe to our daily deals newsletter and be the first to see underwritten STR opportunities before your clients do.</p>
+        </div>
+        <form class="cta-form" onsubmit="event.preventDefault(); this.querySelector('input').value=''; alert('Thanks — you’re on the list!');">
+          <input type="email" placeholder="Enter your email" required />
+          <button class="btn btn--dark" type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TESTIMONIAL ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="quote">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I went from order-taker to advisor."</blockquote>
+        <p style="max-width:62ch; margin:0 auto 22px; color:var(--ink-70)">My investor clients used to bring their own AirDNA screenshots and ask me to validate numbers I couldn't verify. Now I send them a branded pro forma before the tour. The dynamic completely changed.</p>
+        <div class="who">Marcus Chen</div>
+        <div class="role">Real Estate Agent, North Carolina</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GUIDES ===================== -->
+  <section class="section" id="guides">
+    <div class="container">
+      <div class="head-row">
+        <div>
+          <span class="eyebrow">Resources</span>
+          <h2 style="margin-top:16px">Guides &amp; intel for your next client call</h2>
+        </div>
+        <a class="btn btn--ghost" href="#guides">View All Guides</a>
+      </div>
+      <div class="grid-2">
+        <a class="card" href="#">
+          <span class="tag">Channel Managers · Apr 13, 2026</span>
+          <h3>Channel Managers Explained: Do You Need One in 2026</h3>
+          <p>What a channel manager actually does, when an operator needs one, and how the leading platforms compare.</p>
+          <span class="go">Read guide →</span>
+        </a>
+        <a class="card" href="#">
+          <span class="tag">Cleaning &amp; Turnover · Apr 13, 2026</span>
+          <h3>The Best STR Cleaning Management Platforms Compared</h3>
+          <p>Turnover is where guest reviews are won or lost. The platforms that keep your calendar clean, ranked.</p>
+          <span class="go">Read guide →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SUBMIT CTA ===================== -->
+  <section class="section--tight" id="submit">
+    <div class="container">
+      <div class="cta-band" style="background:var(--sage)">
+        <div>
+          <span class="eyebrow">Get listed</span>
+          <h2 style="margin-top:14px">Want to be featured in our newsletter?</h2>
+          <p>We highlight the best tools, lenders, and resources for STR agents. Submit your product or service and our team will review it.</p>
+        </div>
+        <div style="display:flex; gap:14px; flex-wrap:wrap">
+          <a class="btn btn--red" href="mailto:hello@vaultstr.com">Submit a Tool</a>
+          <a class="btn btn--ghost" href="featured-deals.html">Feature a Deal</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <a href="index.html" class="brand">Vault<b>STR</b></a>
+          <p class="footer-blurb">The operating system for real estate agents who advise investor clients — starting with short-term rentals.</p>
+          <div class="footer-social">
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+            <a href="https://www.x.com/" target="_blank" rel="noopener" aria-label="X">X</a>
+          </div>
+        </div>
+        <div>
+          <h5>Software</h5>
+          <a class="fl" href="#">PMS Software</a>
+          <a class="fl" href="#">Dynamic Pricing</a>
+          <a class="fl" href="#">Channel Managers</a>
+          <a class="fl" href="#">Guest Communication</a>
+        </div>
+        <div>
+          <h5>Hardware &amp; Money</h5>
+          <a class="fl" href="#">Smart Locks</a>
+          <a class="fl" href="#">Market Analytics</a>
+          <a class="fl" href="#">STR Lenders</a>
+          <a class="fl" href="#">STR Insurance</a>
+        </div>
+        <div>
+          <h5>Company</h5>
+          <a class="fl" href="about.html">About</a>
+          <a class="fl" href="deals.html">Deal Vault</a>
+          <a class="fl" href="featured-deals.html">Featured Deals</a>
+          <a class="fl" href="mailto:hello@vaultstr.com">Submit a Tool</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 VaultSTR. All rights reserved.</div>
+        <div><a href="#">Terms &amp; Conditions</a> · <a href="#">Privacy Policy</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Rotating hero words
+    (function () {
+      var words = ["better underwriting.", "defensible numbers.", "tool recommendations.", "trusted lenders."];
+      var el = document.getElementById("rotator");
+      var i = 0;
+      setInterval(function () {
+        i = (i + 1) % words.length;
+        el.style.opacity = 0;
+        setTimeout(function () { el.textContent = words[i]; el.style.opacity = 1; }, 220);
+      }, 2600);
+      el.style.transition = "opacity .22s ease";
+    })();
+  </script>
 </body>
 </html>
